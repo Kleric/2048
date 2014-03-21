@@ -17,13 +17,40 @@ Grid.prototype.build = function () {
   }
 };
 
+// Get the current largest value
+Grid.prototype.getLargestValue = function() {
+  var highest = 2;
+
+  this.eachCell(function (x, y, tile) {
+    if (!!tile) {
+      if(highest < tile.value) {
+        highest = tile.value;
+      }
+    }
+  });
+
+  return highest;
+};
+
 // Find the first available random position
 Grid.prototype.randomAvailableCell = function () {
   var cells = this.availableCells();
 
   if (cells.length) {
-    return cells[Math.floor(Math.random() * cells.length)];
+    return cells[Math.floor(Math.random() * (cells.length))];
   }
+};
+
+Grid.prototype.optimalCells = function () {
+  var cells = [];
+
+  this.eachCell(function (x, y, tile) {
+    if (!tile) {
+      cells.push({ x: x, y: y });
+    }
+  });
+
+  return cells;
 };
 
 Grid.prototype.availableCells = function () {
@@ -80,5 +107,5 @@ Grid.prototype.removeTile = function (tile) {
 
 Grid.prototype.withinBounds = function (position) {
   return position.x >= 0 && position.x < this.size &&
-         position.y >= 0 && position.y < this.size;
+  position.y >= 0 && position.y < this.size;
 };
